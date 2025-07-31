@@ -6,7 +6,7 @@ Bu proje, Flutter kullanılarak geliştirilen basit bir **cüzdan uygulamasıdı
 
 | Kartlarım Sayfası | Kart Ekleme Sayfası |
 |-------------------|---------------------|
-| ![Kartlarım](kartlarim.png) | ![Yeni Kart Ekle](yenikart.png) |
+| ![Kartlarım](kartlık.png) | ![Yeni Kart Ekle](yenikart.png) |
 
 
 
