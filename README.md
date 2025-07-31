@@ -1,4 +1,4 @@
-# 🏦 Flutter Cüzdan Uygulaması (TeknolojiPort)
+# 🏦 Flutter  basit Dijital Cüzdan UI
 
 Bu proje, Flutter kullanılarak geliştirilen basit bir **cüzdan uygulamasıdır**. Kullanıcılar kredi kartlarını uygulamaya ekleyebilir, kartları listeleyebilir ve kart bilgilerini görsel olarak görüntüleyebilir.
 
