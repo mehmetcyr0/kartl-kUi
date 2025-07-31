@@ -24,5 +24,4 @@ Bu proje, Flutter kullanılarak geliştirilen basit bir **cüzdan uygulamasıdı
 |-------|----------|
 | [`flutter_credit_card`](https://pub.dev/packages/flutter_credit_card) | Kart tasarımı ve form alanları için kullanıldı |
 
-## 🔧 Kurulum
 
