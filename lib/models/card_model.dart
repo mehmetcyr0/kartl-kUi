@@ -5,6 +5,7 @@ class CardModel {
   final String cardHolderName;
   final String cvvCode;
   final String bankName;
+  final String iban;
   final DateTime createdAt;
 
   CardModel({
@@ -14,6 +15,7 @@ class CardModel {
     required this.cardHolderName,
     required this.cvvCode,
     required this.bankName,
+    required this.iban,
     required this.createdAt,
   });
 
@@ -25,6 +27,7 @@ class CardModel {
       'cardHolderName': cardHolderName,
       'cvvCode': cvvCode,
       'bankName': bankName,
+      'iban': iban,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -37,6 +40,7 @@ class CardModel {
       cardHolderName: json['cardHolderName'],
       cvvCode: json['cvvCode'],
       bankName: json['bankName'],
+      iban: json['iban'] ?? '',
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
@@ -44,6 +48,11 @@ class CardModel {
   String get maskedCardNumber {
     if (cardNumber.length < 4) return cardNumber;
     return '**** **** **** ${cardNumber.substring(cardNumber.length - 4)}';
+  }
+
+  String get maskedIban {
+    if (iban.length < 4) return iban;
+    return 'TR** **** **** **** **** **** ${iban.substring(iban.length - 2)}';
   }
 
   String get cardType {

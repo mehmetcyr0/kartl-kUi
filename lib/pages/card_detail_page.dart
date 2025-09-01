@@ -14,6 +14,7 @@ class CardDetailPage extends StatefulWidget {
 
 class _CardDetailPageState extends State<CardDetailPage> {
   bool showBackView = false;
+  bool showSensitiveInfo = false;
 
   void _copyToClipboard(String text, String label) {
     Clipboard.setData(ClipboardData(text: text));
@@ -39,6 +40,17 @@ class _CardDetailPageState extends State<CardDetailPage> {
         actions: [
           IconButton(
             icon: Icon(
+              showSensitiveInfo ? Icons.visibility_off : Icons.visibility,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                showSensitiveInfo = !showSensitiveInfo;
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(
               showBackView ? Icons.credit_card : Icons.credit_card_outlined,
               color: Colors.white,
             ),
@@ -56,10 +68,10 @@ class _CardDetailPageState extends State<CardDetailPage> {
             const SizedBox(height: 20),
             CreditCardWidget(
               cardBgColor: const Color.fromARGB(255, 46, 44, 44),
-              cardNumber: widget.card.cardNumber,
+              cardNumber: showSensitiveInfo ? widget.card.cardNumber : widget.card.maskedCardNumber,
               expiryDate: widget.card.expiryDate,
               cardHolderName: widget.card.cardHolderName,
-              cvvCode: widget.card.cvvCode,
+              cvvCode: showSensitiveInfo ? widget.card.cvvCode : '***',
               bankName: widget.card.bankName,
               showBackView: showBackView,
               onCreditCardWidgetChange: (_) {},
@@ -99,7 +111,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       ),
                       _buildInfoRow(
                         'Kart Numarası',
-                        widget.card.maskedCardNumber,
+                        showSensitiveInfo ? widget.card.cardNumber : widget.card.maskedCardNumber,
                         Icons.numbers,
                         () => _copyToClipboard(widget.card.cardNumber, 'Kart numarası'),
                       ),
@@ -117,9 +129,15 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       ),
                       _buildInfoRow(
                         'CVV',
-                        '***',
+                        showSensitiveInfo ? widget.card.cvvCode : '***',
                         Icons.security,
                         () => _copyToClipboard(widget.card.cvvCode, 'CVV'),
+                      ),
+                      _buildInfoRow(
+                        'IBAN',
+                        showSensitiveInfo ? widget.card.iban : widget.card.maskedIban,
+                        Icons.account_balance_wallet,
+                        () => _copyToClipboard(widget.card.iban, 'IBAN'),
                       ),
                       const Divider(height: 32),
                       Row(

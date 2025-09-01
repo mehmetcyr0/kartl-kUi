@@ -15,6 +15,7 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   List<CardModel> cards = [];
   bool isLoading = true;
+  Set<String> visibleCardIds = {};
 
   @override
   void initState() {
@@ -104,6 +105,15 @@ class _WalletPageState extends State<WalletPage> {
     }
   }
 
+  void _toggleCardVisibility(String cardId) {
+    setState(() {
+      if (visibleCardIds.contains(cardId)) {
+        visibleCardIds.remove(cardId);
+      } else {
+        visibleCardIds.add(cardId);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,28 +184,53 @@ class _WalletPageState extends State<WalletPage> {
                     itemCount: cards.length,
                     itemBuilder: (context, index) {
                       final card = cards[index];
+                      final isVisible = visibleCardIds.contains(card.id);
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => CardDetailPage(card: card),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => CardDetailPage(card: card),
+                                  ),
+                                );
+                              },
+                              onLongPress: () => _deleteCard(card),
+                              child: CreditCardWidget(
+                                bankName: card.bankName,
+                                cardNumber: isVisible ? card.cardNumber : card.maskedCardNumber,
+                                expiryDate: card.expiryDate,
+                                cardHolderName: card.cardHolderName,
+                                cvvCode: isVisible ? card.cvvCode : '***',
+                                showBackView: false,
+                                isHolderNameVisible: true,
+                                cardBgColor: const Color.fromARGB(255, 46, 44, 44),
+                                onCreditCardWidgetChange: (_) {},
                               ),
-                            );
-                          },
-                          onLongPress: () => _deleteCard(card),
-                          child: CreditCardWidget(
-                            bankName: card.bankName,
-                            cardNumber: card.cardNumber,
-                            expiryDate: card.expiryDate,
-                            cardHolderName: card.cardHolderName,
-                            cvvCode: card.cvvCode,
-                            showBackView: false,
-                            isHolderNameVisible: true,
-                            cardBgColor: const Color.fromARGB(255, 46, 44, 44),
-                            onCreditCardWidgetChange: (_) {},
+                            ),
+                            Positioned(
+                              top: 16,
+                              right: 16,
+                              child: GestureDetector(
+                                onTap: () => _toggleCardVisibility(card.id),
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Icon(
+                                    isVisible ? Icons.visibility_off : Icons.visibility,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                           ),
                         ),
                       );

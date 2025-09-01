@@ -20,10 +20,12 @@ class _AddCardPageState extends State<AddCardPage> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController bankNameController = TextEditingController(text: 'TeknolojiPort');
+  final TextEditingController ibanController = TextEditingController();
 
   @override
   void dispose() {
     bankNameController.dispose();
+    ibanController.dispose();
     super.dispose();
   }
 
@@ -42,6 +44,7 @@ class _AddCardPageState extends State<AddCardPage> {
         cardHolderName: cardHolderName,
         cvvCode: cvvCode,
         bankName: bankNameController.text,
+        iban: ibanController.text,
         createdAt: DateTime.now(),
       );
 
@@ -128,6 +131,32 @@ class _AddCardPageState extends State<AddCardPage> {
                   filled: true,
                   fillColor: Colors.white,
                 ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextFormField(
+                controller: ibanController,
+                decoration: InputDecoration(
+                  labelText: 'IBAN',
+                  hintText: 'TR00 0000 0000 0000 0000 0000 00',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  prefixIcon: const Icon(Icons.account_balance),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'IBAN gereklidir';
+                  }
+                  if (value.length < 26) {
+                    return 'Geçerli bir IBAN giriniz';
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 20),
