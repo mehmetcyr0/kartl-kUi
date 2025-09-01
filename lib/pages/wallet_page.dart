@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../models/card_model.dart';
 import '../services/card_service.dart';
@@ -230,6 +231,40 @@ class _WalletPageState extends State<WalletPage> {
                                 ),
                               ),
                             ),
+                            if (isVisible)
+                              Positioned(
+                                bottom: 16,
+                                left: 16,
+                                right: 16,
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.8),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _buildCopyableInfo('Kart No', card.cardNumber),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: _buildCopyableInfo('CVV', card.cvvCode),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: _buildCopyableInfo('Tarih', card.expiryDate),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      _buildCopyableInfo('IBAN', card.iban),
+                                    ],
+                                  ),
+                                ),
+                              ),
                           ],
                           ),
                         ),
@@ -245,6 +280,63 @@ class _WalletPageState extends State<WalletPage> {
           'Kart Ekle',
           style: TextStyle(color: Colors.white),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCopyableInfo(String label, String value) {
+    return GestureDetector(
+      onTap: () => _copyToClipboard(value, label),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.copy,
+              color: Colors.white70,
+              size: 14,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _copyToClipboard(String text, String label) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$label panoya kopyalandı'),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.green,
       ),
     );
   }
